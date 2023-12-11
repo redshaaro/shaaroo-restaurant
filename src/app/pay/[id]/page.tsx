@@ -3,6 +3,8 @@
 import CheckoutForm from "@/components/CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
+import {BASE_API_URL} from "@/utils/constants"
+
 import { useEffect, useState } from "react";
 
 const stripePromise = loadStripe(
@@ -10,15 +12,17 @@ const stripePromise = loadStripe(
 );
 
 const PayPage = ({ params }: { params: { id: string } }) => {
+  
   const [clientSecret, setClientSecret] = useState("");
 
   const { id } = params;
+  
 
   useEffect(() => {
     const makeRequest = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/create-intent/${id}`,
+          `${BASE_API_URL}/api/create-intent/${id}`,
           {
             method: "POST",
           }
@@ -42,6 +46,9 @@ const PayPage = ({ params }: { params: { id: string } }) => {
       theme: "stripe",
     },
   };
+  if(!BASE_API_URL){
+    return null
+  }
 
   return (
     <div>

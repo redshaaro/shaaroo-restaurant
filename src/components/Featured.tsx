@@ -1,9 +1,10 @@
 import { ProductType } from "@/types/types";
+import {BASE_API_URL} from "@/utils/constants"
 import Image from "next/image";
 import React from "react";
 
 const getData = async ()=>{
-  const res = await fetch("http://localhost:3000/api/products",{
+  const res = await fetch(`${BASE_API_URL}/api/products`,{
     cache:"no-store"
   })
 
@@ -15,6 +16,9 @@ const getData = async ()=>{
 }
 
 const Featured = async () => {
+  if(!BASE_API_URL){
+    return null
+  }
 
   const featuredProducts:ProductType[] = await getData()
 

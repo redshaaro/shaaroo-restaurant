@@ -2,6 +2,8 @@
 
 import { OrderType } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { BASE_API_URL } from "@/utils/constants";
+
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,6 +11,7 @@ import React from "react";
 import { toast } from "react-toastify";
 
 const OrdersPage = () => {
+  
   const { data: session, status } = useSession();
   
 
@@ -17,18 +20,21 @@ const OrdersPage = () => {
   if (status === "unauthenticated") {
     router.push("/");
   }
+  
 
   const { isLoading, data } = useQuery({
     queryKey: ["orders"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/orders").then((res) => res.json()),
+      fetch(`${BASE_API_URL}/api/orders`).then((res) => res.json()),
   });
 
   const queryClient = useQueryClient();
+  
+  
 
   const mutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) => {
-      return fetch(`http://localhost:3000/api/orders/${id}`, {
+      return fetch(`${BASE_API_URL}/api/orders/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -40,6 +46,10 @@ const OrdersPage = () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
+  if(!BASE_API_URL){
+    return null
+  }
+ 
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
@@ -50,11 +60,11 @@ const OrdersPage = () => {
     mutation.mutate({ id, status });
     toast.success("The order status has been changed!");
   };
-  
 
   if (isLoading || status === "loading") return "Loading...";
 
   return (
+    
     <div className="p-4 lg:px-20 xl:px-40">
       <table className="w-full border-separate border-spacing-3">
         <thead>
