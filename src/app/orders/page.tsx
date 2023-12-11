@@ -36,6 +36,7 @@ const OrdersPage = () => {
     mutationFn: ({ id, status }: { id: string; status: string }) => {
       return fetch(`${BASE_API_URL}/api/orders/${id}`, {
         method: "PUT",
+        mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
         },
@@ -77,7 +78,7 @@ const OrdersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item: OrderType) => (
+          {data?.map((item: OrderType) => (
             <tr
               className={`${item.status !== "delivered" && "bg-red-50"}`}
               key={item.id}
