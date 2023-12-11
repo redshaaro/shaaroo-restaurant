@@ -1,10 +1,12 @@
 import { ProductType } from "@/types/types";
 import Image from "next/image";
+import {BASE_API_URL} from "@/utils/constants"
+
 import Link from "next/link";
 import React from "react";
 
 const getData = async (category:string)=>{
-  const res = await fetch(`http://localhost:3000/api/products?cat=${category}`,{
+  const res = await fetch(`${BASE_API_URL}/api/products?cat=${category}`,{
     cache:"no-store"
   })
 
@@ -21,6 +23,9 @@ type Props = {
 }
 
 const CategoryPage = async ({params}:Props) => {
+  if(!BASE_API_URL){
+    return null
+  }
 
   const products:ProductType[] = await getData(params.category)
   return (

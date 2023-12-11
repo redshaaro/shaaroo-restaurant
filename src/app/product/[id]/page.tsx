@@ -1,11 +1,13 @@
 import DeleteButton from "@/components/DeleteButton";
 import Price from "@/components/Price";
 import { ProductType } from "@/types/types";
+import {BASE_API_URL} from "@/utils/constants"
+
 import Image from "next/image";
 import React from "react";
 
 const getData = async (id: string) => {
-  const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+  const res = await fetch(`${BASE_API_URL}/api/products/${id}`, {
     cache: "no-store",
   });
 
@@ -17,6 +19,9 @@ const getData = async (id: string) => {
 };
 
 const SingleProductPage = async ({ params }: { params: { id: string } }) => {
+  if(!BASE_API_URL){
+    return null
+  }
   const singleProduct: ProductType = await getData(params.id);
 
   return (

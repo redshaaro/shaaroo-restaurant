@@ -1,9 +1,11 @@
 import { MenuType } from "@/types/types";
 import Link from "next/link";
+import {BASE_API_URL} from "@/utils/constants"
+
 import React from "react";
 
 const getData = async ()=>{
-  const res = await fetch("http://localhost:3000/api/categories",{
+  const res = await fetch(`${BASE_API_URL}/api/categories`,{
     cache:"no-store"
   })
 
@@ -16,6 +18,9 @@ const getData = async ()=>{
 }
 
 const MenuPage = async () => {
+  if(!BASE_API_URL){
+    return null
+  }
 
   const menu:MenuType = await getData()
   return (

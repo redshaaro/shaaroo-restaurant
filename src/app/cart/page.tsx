@@ -1,11 +1,15 @@
 "use client";
 import { useCartStore } from "@/utils/store";
 import { useSession } from "next-auth/react";
+import { BASE_API_URL } from "@/utils/constants";
+
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const CartPage = () => {
+  
   const { products, totalItems, totalPrice, removeFromCart } = useCartStore();
   const { data: session } = useSession();
   const router = useRouter();
@@ -13,11 +17,13 @@ const CartPage = () => {
   useEffect(() => {
     useCartStore.persist.rehydrate();
   }, []);
-
+  if(!BASE_API_URL){
+    return null
+  }
   const handleCheckout = async () => {
     if (!session) router.push("/login");
     try {
-      const res = await fetch("http://localhost:3000/api/orders", {
+      const res = await fetch(`${BASE_API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
