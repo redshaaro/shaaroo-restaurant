@@ -3,13 +3,11 @@ import { useCartStore } from "@/utils/store";
 import { useSession } from "next-auth/react";
 import { BASE_API_URL } from "@/utils/constants";
 
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const CartPage = () => {
-  
   const { products, totalItems, totalPrice, removeFromCart } = useCartStore();
   const { data: session } = useSession();
   const router = useRouter();
@@ -17,8 +15,8 @@ const CartPage = () => {
   useEffect(() => {
     useCartStore.persist.rehydrate();
   }, []);
-  if(!BASE_API_URL){
-    return null
+  if (!BASE_API_URL) {
+    return null;
   }
   const handleCheckout = async () => {
     if (!session) router.push("/login");
@@ -70,7 +68,7 @@ const CartPage = () => {
       <div className="h-1/2 p-4 bg-fuchsia-50 flex flex-col gap-4 justify-center lg:h-full lg:w-1/3 2xl:w-1/2 lg:px-20 xl:px-40 2xl:text-xl 2xl:gap-6">
         <div className="flex justify-between">
           <span className="">Subtotal ({totalItems} items)</span>
-          <span className="">${totalPrice}</span>
+          <span className="">${Number(totalPrice).toFixed(2)}</span>
         </div>
         <div className="flex justify-between">
           <span className="">Service Cost</span>
@@ -83,10 +81,14 @@ const CartPage = () => {
         <hr className="my-2" />
         <div className="flex justify-between">
           <span className="">TOTAL(INCL. VAT)</span>
-          <span className="font-bold">${totalPrice}</span>
+          <span className="font-bold">${Number(totalPrice).toFixed(2)}</span>
         </div>
+
         <button
-          className="bg-red-500 text-white p-3 rounded-md w-1/2 self-end"
+          disabled={!products.length ? true : false}
+          className={`bg-red-500 text-white p-3 rounded-md w-1/2 self-end ${
+            !products.length && "cursor-not-allowed"
+          }`}
           onClick={handleCheckout}
         >
           CHECKOUT

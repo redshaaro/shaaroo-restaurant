@@ -43,12 +43,12 @@ export const featuredProducts: Products = [
         additionalPrice: 0,
       },
       {
-        title: "Medium",
+        "title": "Medium",
         additionalPrice: 4,
       },
       {
-        title: "Large",
-        additionalPrice: 6,
+        "title": "Large",
+        "additionalPrice": 6,
       },
     ],
   },

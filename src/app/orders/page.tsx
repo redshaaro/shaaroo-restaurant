@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { OrderType } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_API_URL } from "@/utils/constants";
@@ -11,16 +11,14 @@ import React from "react";
 import { toast } from "react-toastify";
 
 const OrdersPage = () => {
-  
   const { data: session, status } = useSession();
-  
+  const [state, setState] = useState("");
 
   const router = useRouter();
 
   if (status === "unauthenticated") {
     router.push("/");
   }
-  
 
   const { isLoading, data } = useQuery({
     queryKey: ["orders"],
@@ -29,43 +27,37 @@ const OrdersPage = () => {
   });
 
   const queryClient = useQueryClient();
-  
-  
 
   const mutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) => {
+    mutationFn: ({ id, state }: { id: string; state: string }) => {
       return fetch(`${BASE_API_URL}/api/orders/${id}`, {
         method: "PUT",
-        mode: 'no-cors',
+
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(status),
+        body: JSON.stringify(state),
       });
     },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
-  if(!BASE_API_URL){
-    return null
+  if (!BASE_API_URL) {
+    return null;
   }
- 
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const input = form.elements[0] as HTMLInputElement;
-    const status = input.value;
 
-    mutation.mutate({ id, status });
+    mutation.mutate({ id, state });
+    setState("");
     toast.success("The order status has been changed!");
   };
 
   if (isLoading || status === "loading") return "Loading...";
 
   return (
-    
     <div className="p-4 lg:px-20 xl:px-40">
       <table className="w-full border-separate border-spacing-3">
         <thead>
@@ -81,15 +73,22 @@ const OrdersPage = () => {
           {data?.map((item: OrderType) => (
             <tr
               className={`${item.status !== "delivered" && "bg-red-50"}`}
-              key={item.id}
+              key={item?.id}
             >
-              <td className="hidden md:block py-6 px-1">{item.id}</td>
+              <td className="hidden md:block py-6 px-1">{item?.id}</td>
               <td className="py-6 px-1">
                 {item.createdAt.toString().slice(0, 10)}
               </td>
               <td className="py-6 px-1">{item.price}</td>
               <td className="hidden md:block py-6 px-1">
-                {item.products[0].title}
+                {item?.products?.map((product) => (
+                  <ol key={product.id}>
+                    {" "}
+                    <li>
+                      {product.quantity}X{product.title}{product.optionTitle?product.optionTitle:""}
+                    </li>
+                  </ol>
+                ))}
               </td>
               {session?.user.isAdmin ? (
                 <td>
@@ -97,11 +96,25 @@ const OrdersPage = () => {
                     className="flex items-center justify-center gap-4"
                     onSubmit={(e) => handleUpdate(e, item.id)}
                   >
-                    <input
-                      placeholder={item.status}
+                    <select
+                      onChange={(e) => {
+                        setState(e.target.value);
+                      }}
                       className="p-2 ring-1 ring-red-100 rounded-md"
-                    />
-                    <button className="bg-red-400 p-2 rounded-full">
+                    >
+                      <option value="">Select Status</option>
+                      <option value="delivered">delivered</option>
+                      <option value="preparing">being prepared</option>
+                      <option value="on-way">on-way</option>
+                    </select>
+
+                    <button
+                      disabled={!state.length ? true : false}
+                      type="submit"
+                      className={`bg-red-400 p-2 rounded-full ${
+                        !state.length && "cursor-not-allowed"
+                      }`}
+                    >
                       <Image src="/edit.png" alt="" width={20} height={20} />
                     </button>
                   </form>
