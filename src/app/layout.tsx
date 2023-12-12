@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lama Restaurant",
+  title: "SHAAROO Restaurant",
   description: "Best food in town!",
 };
 
