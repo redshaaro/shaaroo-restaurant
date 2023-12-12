@@ -12,38 +12,39 @@ const Price = ({ product }: { product: ProductType }) => {
 
   const { addToCart } = useCartStore();
 
-  useEffect(()=>{
-    useCartStore.persist.rehydrate()
-  },[])
+  useEffect(() => {
+    useCartStore.persist.rehydrate();
+  }, []);
 
   useEffect(() => {
     if (product.options?.length) {
       setTotal(
         quantity * product.price + product.options[selected].additionalPrice
-      )
-    }else{
-      setTotal(quantity * product.price)
+      );
+    } else {
+      setTotal(quantity * product.price);
     }
   }, [quantity, selected, product]);
 
-  const handleCart = ()=>{
+  const handleCart = () => {
     addToCart({
       id: product.id,
       title: product.title,
       img: product.img,
-      price: total,
+      price:Number(Number(total).toFixed(1)),
       ...(product.options?.length && {
         optionTitle: product.options[selected].title,
       }),
       quantity: quantity,
-    })
-    toast.success("The product added to the cart!")
-  }
+    });
+    toast.success("The product added to the cart!");
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-2xl font-bold">${total}</h2>
+      <h2 className="text-2xl font-bold">${Number(total).toFixed(1)}</h2>
       {/* OPTIONS CONTAINER */}
+      {product.options?.length?
       <div className="flex gap-4">
         {product.options?.length &&
           product.options?.map((option, index) => (
@@ -60,6 +61,7 @@ const Price = ({ product }: { product: ProductType }) => {
             </button>
           ))}
       </div>
+      :""}
       {/* QUANTITY AND ADD BUTTON CONTAINER */}
       <div className="flex justify-between items-center">
         {/* QUANTITY */}

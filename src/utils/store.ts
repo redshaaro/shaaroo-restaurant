@@ -14,22 +14,27 @@ export const useCartStore = create(
       products: INITIAL_STATE.products,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
+
+
       addToCart(item) {
         const products = get().products;
+
         const productInState = products.find(
-          (product) => product.id === item.id
+          (product) => product.id === item.id && product.optionTitle === item.optionTitle
         );
 
+        
         if (productInState) {
           const updatedProducts = products.map((product) =>
-            product.id === productInState.id
+            product.id === productInState.id && product.optionTitle === productInState.optionTitle
               ? {
-                  ...item,
-                  quantity: item.quantity + product.quantity,
-                  price: item.price + product.price,
-                }
-              : item
+                ...productInState,
+                quantity: item.quantity + productInState.quantity,
+                price: item.price + productInState.price,
+              }
+              : product
           );
+
           set((state) => ({
             products: updatedProducts,
             totalItems: state.totalItems + item.quantity,
@@ -42,7 +47,8 @@ export const useCartStore = create(
             totalPrice: state.totalPrice + item.price,
           }));
         }
-      },
+      }
+      ,
       removeFromCart(item) {
         set((state) => ({
           products: state.products.filter((product) => product.id !== item.id),

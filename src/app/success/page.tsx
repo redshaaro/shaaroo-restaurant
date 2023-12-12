@@ -25,7 +25,7 @@ const Success = () => {
   if(!BASE_API_URL){
     return null
   }
-  return <div>Success</div>;
+  return <div>Success Don't close the tab. Redirecting you to the orders dashboard</div>;
 };
 
 export default Success;
