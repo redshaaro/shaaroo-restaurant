@@ -11,7 +11,7 @@ export const PUT = async (
 
   try {
     const body = await req.json();
-    if (body === "delivered") {
+    if (body.state === "delivered") {
       await prisma.order.delete({ where: { id: id } })
       return new NextResponse(
         JSON.stringify({ message: "Order has been deleted!" }),
@@ -22,7 +22,7 @@ export const PUT = async (
         where: {
           id: id,
         },
-        data: { status: body },
+        data:{ status: body.state } ,
       });
       return new NextResponse(
         JSON.stringify({ message: "Order has been updated!" }),

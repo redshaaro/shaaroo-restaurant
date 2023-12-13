@@ -3,6 +3,7 @@ import { useState } from "react";
 import { OrderType } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_API_URL } from "@/utils/constants";
+import { fetchdata } from "@/lib/fetchdata";
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -22,22 +23,14 @@ const OrdersPage = () => {
 
   const { isLoading, data } = useQuery({
     queryKey: ["orders"],
-    queryFn: () =>
-      fetch(`${BASE_API_URL}/api/orders`).then((res) => res.json()),
+    queryFn: () => fetchdata(`${BASE_API_URL}/api/orders`, "GET"),
   });
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: ({ id, state }: { id: string; state: string }) => {
-      return fetch(`${BASE_API_URL}/api/orders/${id}`, {
-        method: "PUT",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(state),
-      });
+      return fetchdata(`${BASE_API_URL}/api/orders/${id}`, "PUT", { state });
     },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
@@ -77,15 +70,22 @@ const OrdersPage = () => {
             >
               <td className="hidden md:block py-6 px-1">{item?.id}</td>
               <td className="py-6 px-1">
-                {item.createdAt.toString().slice(0, 10)}
+                <ul>
+                  <li>
+                    
+                    Date: {item.createdAt.toString().slice(0, 10)}
+                    <li>Time: {item.createdAt.toString().slice(11, 22)}</li>
+                  </li>
+                </ul>
               </td>
-              <td className="py-6 px-1">{item.price}</td>
+              <td className="py-6 px-1">{Number(item.price).toFixed(2)}</td>
               <td className="hidden md:block py-6 px-1">
                 {item?.products?.map((product) => (
                   <ol key={product.id}>
                     {" "}
                     <li>
-                      {product.quantity}X{product.title}{product.optionTitle?product.optionTitle:""}
+                      {product.quantity}X{product.title}
+                      {product.optionTitle ? -product.optionTitle : ""}
                     </li>
                   </ol>
                 ))}

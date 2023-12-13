@@ -1,6 +1,6 @@
 import { prisma } from "@/utils/connect";
 import { NextRequest, NextResponse } from "next/server";
-const stripe = require("stripe")("sk_test_51OLk9fEk4rvikAnIdj40veeEtdFiMxlhs9qDSnoKrrc6qIYfGck0kmNvb6sWG5nwPVT2uS7M9NSzW4kbIZKQ1DMR00lXCFEDcC");
+const stripe = require("stripe")(`${process.env.NEXT_PUBLIC_SECRETE_KEY}`);
 
 
 export const POST = async (request: NextRequest, { params }: { params: { orderId: string } }) => {

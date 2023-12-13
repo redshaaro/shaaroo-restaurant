@@ -6,6 +6,7 @@ import { BASE_API_URL } from "@/utils/constants";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { fetchdata } from "@/lib/fetchdata";
 
 const CartPage = () => {
   const { products, totalItems, totalPrice, removeFromCart } = useCartStore();
@@ -20,22 +21,16 @@ const CartPage = () => {
   }
   const handleCheckout = async () => {
     if (!session) router.push("/login");
-    try {
-      const res = await fetch(`${BASE_API_URL}/api/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          price: totalPrice,
-          products,
-          status: "not paied!!",
-          userEmail: session?.user.email,
-        }),
-      });
-      const data = await res.json();
+
+   const data= await fetchdata(`${BASE_API_URL}/api/orders`, "POST", {
+      price: totalPrice,
+      products,
+      status: "not paied!!",
+      userEmail: session?.user.email,
+    });
+    
       router.push(`/pay/${data.id}`);
-    } catch (err) {
-      console.log(err);
-    }
+
   };
 
   return (

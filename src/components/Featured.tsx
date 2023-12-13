@@ -1,26 +1,18 @@
 import { ProductType } from "@/types/types";
-import {BASE_API_URL} from "@/utils/constants"
+import { BASE_API_URL } from "@/utils/constants";
 import Image from "next/image";
 import React from "react";
-
-const getData = async ()=>{
-  const res = await fetch(`${BASE_API_URL}/api/products`,{
-    cache:"no-store"
-  })
-
-  if(!res.ok){
-    throw new Error("Failed!");
-  }
-
-  return res.json()
-}
+import { fetchdata } from "@/lib/fetchdata";
 
 const Featured = async () => {
-  if(!BASE_API_URL){
-    return null
+  if (!BASE_API_URL) {
+    return null;
   }
 
-  const featuredProducts:ProductType[] = await getData()
+  const featuredProducts: ProductType[] = await fetchdata(
+    `${BASE_API_URL}/api/products`,
+    "GET"
+  );
 
   return (
     <div className="w-full overflow-x-scroll text-red-500">
@@ -40,7 +32,9 @@ const Featured = async () => {
             )}
             {/* TEXT CONTAINER */}
             <div className=" flex-1 flex flex-col items-center justify-center text-center gap-4">
-              <h1 className="text-xl font-bold uppercase xl:text-2xl 2xl:text-3xl">{item.title}</h1>
+              <h1 className="text-xl font-bold uppercase xl:text-2xl 2xl:text-3xl">
+                {item.title}
+              </h1>
               <p className="p-4 2xl:p-8">{item.desc}</p>
               <span className="text-xl font-bold">${item.price}</span>
               <button className="bg-red-500 text-white p-2 rounded-md">
