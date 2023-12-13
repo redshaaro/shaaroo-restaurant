@@ -58,6 +58,15 @@ export const useCartStore = create(
         });
       }
       ,
+      resetCart() {
+        set(() => {
+          return {
+            products: INITIAL_STATE.products,
+            totalItems: INITIAL_STATE.totalItems,
+            totalPrice: INITIAL_STATE.totalPrice,
+          }
+        })
+      }
 
     }),
     { name: "cart", skipHydration: true }
