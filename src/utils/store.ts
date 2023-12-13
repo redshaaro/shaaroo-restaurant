@@ -18,22 +18,15 @@ export const useCartStore = create(
 
       addToCart(item) {
         const products = get().products;
-
-        const productInState = products.find(
+        const productIndex = products.findIndex(
           (product) => product.id === item.id && product.optionTitle === item.optionTitle
         );
 
-        
-        if (productInState) {
-          const updatedProducts = products.map((product) =>
-            product.id === productInState.id && product.optionTitle === productInState.optionTitle
-              ? {
-                ...productInState,
-                quantity: item.quantity + productInState.quantity,
-                price: item.price + productInState.price,
-              }
-              : product
-          );
+        if (productIndex !== -1) {
+          const updatedProducts = [...products];
+          const existingProduct = updatedProducts[productIndex];
+          existingProduct.quantity += item.quantity;
+          existingProduct.price += item.price;
 
           set((state) => ({
             products: updatedProducts,
@@ -48,14 +41,24 @@ export const useCartStore = create(
           }));
         }
       }
+
+
       ,
       removeFromCart(item) {
-        set((state) => ({
-          products: state.products.filter((product) => product.id !== item.id),
-          totalItems: state.totalItems - item.quantity,
-          totalPrice: state.totalPrice - item.price,
-        }));
-      },
+        set((state) => {
+          const updatedProducts = state.products.filter(
+            (product) => !(product.id === item.id && product.optionTitle === item.optionTitle)
+          );
+
+          return {
+            products: updatedProducts,
+            totalItems: state.totalItems - item.quantity,
+            totalPrice: state.totalPrice - item.price,
+          };
+        });
+      }
+      ,
+
     }),
     { name: "cart", skipHydration: true }
   )

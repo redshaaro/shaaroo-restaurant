@@ -44,7 +44,10 @@ const CartPage = () => {
       <div className="h-1/2 p-4 flex flex-col justify-center overflow-scroll lg:h-full lg:w-2/3 2xl:w-1/2 lg:px-20 xl:px-40">
         {/* SINGLE ITEM */}
         {products.map((item) => (
-          <div className="flex items-center justify-between mb-4" key={item.id}>
+          <div
+            className="flex items-center justify-between mb-4"
+            key={`${item.id}-${item.optionTitle}`}
+          >
             {item.img && (
               <Image src={item.img} alt="" width={100} height={100} />
             )}
