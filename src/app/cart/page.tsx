@@ -22,15 +22,14 @@ const CartPage = () => {
   const handleCheckout = async () => {
     if (!session) router.push("/login");
 
-   const data= await fetchdata(`${BASE_API_URL}/api/orders`, "POST", {
+    const data = await fetchdata(`${BASE_API_URL}/api/orders`, "POST", {
       price: totalPrice,
       products,
       status: "not paied!!",
       userEmail: session?.user.email,
     });
-    
-      router.push(`/pay/${data.id}`);
 
+    router.push(`/pay/${data.id}`);
   };
 
   return (
