@@ -72,7 +72,6 @@ const OrdersPage = () => {
               <td className="py-6 px-1">
                 <ul>
                   <li>
-                    
                     Date: {item.createdAt.toString().slice(0, 10)}
                     <li>Time: {item.createdAt.toString().slice(11, 22)}</li>
                   </li>

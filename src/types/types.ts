@@ -25,6 +25,12 @@ export type OrderType = {
   createdAt: Date;
   intent_id?: String;
 };
+export type SearchedProduct = {
+  id: string;
+  img?: string;
+  title: string;
+  price: string;
+}[];
 
 export type CartItemType = {
   id: string;

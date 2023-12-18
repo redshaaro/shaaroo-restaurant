@@ -14,6 +14,7 @@ const Navbar = () => {
         <Link href="/">Homepage</Link>
         <Link href="/menu">Menu</Link>
         <Link href="/">Contact</Link>
+        <Link href="/search">Search</Link>
       </div>
       {/* LOGO */}
       <div className="text-xl md:font-bold flex-1 md:text-center">

@@ -8,7 +8,7 @@ const UserLinks = () => {
   return (
     <div>
       {status === "authenticated" ? (
-        <div>
+        <div className="flex flex-col items-baseline md:flex-row">
           <Link href="/orders">Orders</Link>
           <span className="ml-4 cursor-pointer" onClick={() => signOut()}>Logout</span>
         </div>

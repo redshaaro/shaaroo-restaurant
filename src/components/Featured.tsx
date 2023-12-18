@@ -1,5 +1,7 @@
 import { ProductType } from "@/types/types";
 import { BASE_API_URL } from "@/utils/constants";
+import Link from "next/link";
+
 import Image from "next/image";
 import React from "react";
 import { fetchdata } from "@/lib/fetchdata";
@@ -37,9 +39,9 @@ const Featured = async () => {
               </h1>
               <p className="p-4 2xl:p-8">{item.desc}</p>
               <span className="text-xl font-bold">${item.price}</span>
-              <button className="bg-red-500 text-white p-2 rounded-md">
+             <Link href="/menu"><button className="bg-red-500 text-white p-2 rounded-md">
                 Add to Cart
-              </button>
+              </button></Link> 
             </div>
           </div>
         ))}
