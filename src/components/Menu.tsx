@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CartIcon from "./CartIcon";
+import UserLinks from "./UserLinks";
 
 const links = [
   { id: 1, title: "Homepage", url: "/" },
@@ -19,24 +20,7 @@ const Menu = () => {
   const user = false;
   return (
     <div>
-      {/* LONG WAY */}
-      {/* {!open ? (
-        <Image
-          src="/open.png"
-          alt=""
-          width={20}
-          height={20}
-          onClick={() => setOpen(true)}
-        />
-      ) : (
-        <Image
-          src="/close.png"
-          alt=""
-          width={20}
-          height={20}
-          onClick={() => setOpen(false)}
-        />
-      )} */}
+  
       
       {/* SHORTCUT */}
       <Image
@@ -71,7 +55,7 @@ const Menu = () => {
             href={user ? "/orders" : "login"}
             onClick={() => setOpen(false)}
           >
-            {user ? "Orders" : "Login"}
+          <UserLinks></UserLinks>
           </Link>
           <Link href="/cart" onClick={() => setOpen(false)}>
             <CartIcon />

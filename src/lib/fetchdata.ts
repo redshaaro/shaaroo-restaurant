@@ -4,8 +4,8 @@ export const fetchdata = async (url: string, method: string, data: Record<string
         body: method !== "GET" && method !== "HEAD" ? JSON.stringify(data) : null,
         headers: new Headers({
             'Content-Type': 'application/json',
-            ...headers,   
-          })
+            ...headers,
+        })
 
     }
     try {
