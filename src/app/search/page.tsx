@@ -10,7 +10,6 @@ import { SearchedProduct } from "@/types/types";
 const SearchPage = () => {
   const searchparams = useSearchParams();
   const query = searchparams.get("product");
-  
 
   const [data, setData] = useState<SearchedProduct>([]);
 
